@@ -59,8 +59,11 @@ jobs:
           echo "GOOGLE_APPLICATION_CREDENTIALS=/tmp/sa-key.json" >> $GITHUB_ENV
 
       - name: Pull data with DVC
-        # TODO 2.11.3: Dung lenh dvc pull de tai train_phase1.csv va eval.csv tu cloud storage
-        run: dvc pull
+        run: |
+          # Cấu hình DVC sử dụng file key vừa tạo ở bước Authenticate
+          dvc remote modify myremote credentialpath /tmp/sa-key.json
+          # Pull dữ liệu
+          dvc pull data/train_phase1.csv.dvc data/eval.csv.dvc
 
       - name: Train model
         run: python src/train.py
