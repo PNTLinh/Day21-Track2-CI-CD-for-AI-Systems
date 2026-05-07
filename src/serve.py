@@ -7,7 +7,7 @@ import os
 app = FastAPI()
 
 GCS_BUCKET = os.environ["GCS_BUCKET"]
-GCS_MODEL_KEY = "models/model.pkl"
+GCS_MODEL_KEY = "models/latest/model.pkl"
 MODEL_PATH = os.path.expanduser("~/models/model.pkl")
 
 
@@ -82,4 +82,5 @@ def predict(req: PredictRequest):
 
 if __name__ == "__main__":
     import uvicorn
+    # Phải là 0.0.0.0 thì mới nhận kết nối từ IP 34.134.51.29 của bạn được
     uvicorn.run(app, host="0.0.0.0", port=8000)
