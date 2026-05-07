@@ -63,7 +63,7 @@ jobs:
           # Cấu hình DVC sử dụng file key vừa tạo ở bước Authenticate
           dvc remote modify myremote credentialpath /tmp/sa-key.json
           # Pull dữ liệu
-          dvc pull data/train_phase1.csv.dvc data/eval.csv.dvc
+          dvc pull 
 
       - name: Train model
         run: python src/train.py
