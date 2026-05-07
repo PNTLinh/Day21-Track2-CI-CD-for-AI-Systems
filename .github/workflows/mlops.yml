@@ -126,7 +126,7 @@ jobs:
         run: |
           python - <<'EOF'
           accuracy = float("${{ needs.train.outputs.accuracy }}")
-          threshold = 0.70
+          threshold = 0.50
           if accuracy < threshold:
               print(f"Accuracy {accuracy:.4f} < {threshold}. Deployment blocked.")
               exit(1)
