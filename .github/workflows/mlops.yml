@@ -58,13 +58,18 @@ jobs:
           echo "${{ secrets.CLOUD_CREDENTIALS }}" > /tmp/sa-key.json
           echo "GOOGLE_APPLICATION_CREDENTIALS=/tmp/sa-key.json" >> $GITHUB_ENV
 
+      - id: 'auth'
+        name: 'Authenticate to Google Cloud'
+        uses: 'google-github-actions/auth@v2'
+        with:
+          credentials_json: '${{ secrets.CLOUD_CREDENTIALS }}'
+          create_credentials_file: true
+
       - name: Pull data with DVC
         run: |
-          # Cấu hình DVC sử dụng file key vừa tạo ở bước Authenticate
-          dvc remote modify myremote credentialpath /tmp/sa-key.json
-          # Pull dữ liệu
-          dvc pull data/train_phase1.csv.dvc
-          dvc pull data/eval.csv.dvc
+          # Sử dụng đường dẫn file key do Action auth tự tạo ra
+          dvc remote modify myremote credentialpath ${{ steps.auth.outputs.credentials_file_path }}
+          dvc pull data/train_phase1.csv.dvc data/eval.csv.dvc
 
       - name: Train model
         run: python src/train.py
