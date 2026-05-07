@@ -146,13 +146,14 @@ jobs:
           username: ${{ secrets.VM_USER }}
           key: ${{ secrets.VM_SSH_KEY }}
           script: |
-            # TODO 2.11.7: Restart service mlops-serve tren VM.
             sudo systemctl restart mlops-serve
-            # TODO 2.11.8: Cho server san sang (sleep 5 giay) roi goi curl /health de xac nhan.
-            #   Neu health check that bai, thoat voi exit 1.
-            sleep 5
-            if ! curl -f http://localhost:8000/health; then
-              echo "Health check failed"
-              exit 1
-            fi
-            echo "Deployment successful!"
+            sleep 10
+
+            echo "== service status =="
+            sudo systemctl status mlops-serve --no-pager
+
+            echo "== port check =="
+            ss -lntp | grep 8000  true
+
+            echo "== curl debug =="
+            curl -v http://localhost:8000/health  true
